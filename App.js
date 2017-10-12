@@ -40,7 +40,7 @@ export default class App extends Component<{}> {
         <TextInput  style={styles.s1} onChangeText={(value)=>{this.setState({munite:value})}} placeholder={"munite"}/>
         <Button title="start" onPress={()=>{
             mymodule.callTestModule(this.state.hour,0.1);
-            alarm.createAlarm(parseInt(this.state.hour),parseInt(this.state.munite));
+            alarm.createAlarm(parseInt(this.state.hour),parseInt(this.state.munite),"You have 3 apoint in tomorow");
 
             }}/>
       </View>

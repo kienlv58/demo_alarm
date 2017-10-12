@@ -12,19 +12,15 @@ import android.util.Log;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("We are in the receiver", "Danny");
 
+
+        String n = intent.getExtras().getString(Const.ALARM_NOTI);
         //get string from intent
-        String get_your_string = intent.getExtras().getString("extra");
-        Log.e("What is the key", get_your_string);
+        if (n.equals(Const.ALARM_ON)) {Intent serviceIntent = new Intent(context, RingtonePlayingService.class);
+            serviceIntent.putExtra(Const.ALARM_NOTI, Const.ALARM_ON);
+            serviceIntent.putExtra(Const.ALARM_NOTI_DATA, intent.getExtras().getString(Const.ALARM_NOTI_DATA));
+            context.startService(serviceIntent);
+        }
 
-
-
-        //create intent to the ringtone service
-        Intent serviceIntent = new Intent(context, RingtonePlayingService.class);
-        //pass the extra string from Main to Ringtone
-        serviceIntent.putExtra("extra", get_your_string);
-
-        context.startService(serviceIntent);
     }
 }

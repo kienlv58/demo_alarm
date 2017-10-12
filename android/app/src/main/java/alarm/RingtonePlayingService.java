@@ -25,6 +25,7 @@ import com.alarm_demo.R;
 public class RingtonePlayingService extends Service {
     MediaPlayer mediaPlayer;
     boolean isRunning;
+    String dataNoti;
 
     @Nullable
     @Override
@@ -38,16 +39,23 @@ public class RingtonePlayingService extends Service {
         Log.i("Local service", "Receiver start id " + startId + ": " + intent);
 
         //get the extra string values
-        String state = intent.getExtras().getString("extra");
+        String state = intent.getExtras().getString(Const.ALARM_NOTI);
+        dataNoti = intent.getExtras().getString(Const.ALARM_NOTI_DATA);
+        this.isRunning = false;
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+        }
+        mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+        mediaPlayer.setVolume(50, 50);
 
-        Log.e("Ringtone state: ", state);
 
         assert state != null;
         switch (state) {
-            case "alarm on":
+            case Const.ALARM_ON:
                 startId = 1;
                 break;
-            case "alarm off":
+            case  Const.ALARM_OFF:
                 startId = 0;
                 break;
             default:
@@ -61,8 +69,7 @@ public class RingtonePlayingService extends Service {
         if (!this.isRunning && startId == 1) {
 
             //create instance of the media player
-            mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
-            mediaPlayer.setVolume(50, 50);
+
             mediaPlayer.start();
 
             this.isRunning = true;
@@ -73,14 +80,16 @@ public class RingtonePlayingService extends Service {
             PendingIntent pendingMainIntent = PendingIntent.getActivity(this, 0, mainIntent, 0);
 
             Notification notification = new Notification.Builder(this)
-                    .setContentTitle("Alarm is going off")
-                    .setContentText("Tap here")
+                    .setContentTitle(dataNoti)
+                    .setContentText("Go to detail")
                     .setContentIntent(pendingMainIntent)
                     .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                     .setAutoCancel(true)
                     .build();
 
-            notificationManager.notify(0, notification);
+            final int _id = (int) System.currentTimeMillis();
+
+            notificationManager.notify(_id, notification);
 
 //wake up screen
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -98,8 +107,7 @@ public class RingtonePlayingService extends Service {
         else if (this.isRunning && startId == 0) {
 
             //stop the ringtone
-            mediaPlayer.stop();
-            mediaPlayer.reset();
+
 
             this.isRunning = false;
         }
