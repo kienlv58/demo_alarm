@@ -16,6 +16,7 @@ import {
 
 var mymodule = NativeModules.TestModule;
 var alarm = NativeModules.AlarmAndroid;
+var AndroidSharePre = NativeModules.AndroidSharePre;
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -40,9 +41,19 @@ export default class App extends Component<{}> {
         <TextInput  style={styles.s1} onChangeText={(value)=>{this.setState({munite:value})}} placeholder={"munite"}/>
         <Button title="start" onPress={()=>{
             mymodule.callTestModule(this.state.hour,0.1);
-            alarm.createAlarm(parseInt(this.state.hour),parseInt(this.state.munite),"You have 3 apoint in tomorow");
+            alarm.createAlarm(parseInt(this.state.hour),parseInt(this.state.munite),"You have 1 apoint in tomorow");
 
             }}/>
+          <Button title="set data" onPress={()=>{
+              AndroidSharePre.setDataString("token",this.state.hour)
+          }}/>
+          <Button title="get data" onPress={()=>{
+              AndroidSharePre.getDataString("token",(data)=>{
+                  alert(data);
+              });
+
+
+          }}/>
       </View>
     );
   }

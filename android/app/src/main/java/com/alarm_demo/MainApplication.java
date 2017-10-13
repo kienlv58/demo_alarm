@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import reactmodule.AlarmPackage;
+import reactmodule.SharePrePackage;
 import reactmodule.TestReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -29,7 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
               new TestReactPackage(),
-              new AlarmPackage()
+              new AlarmPackage(),
+              new SharePrePackage()
       );
     }
 

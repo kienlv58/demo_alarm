@@ -186,4 +186,13 @@ final public class SharedPrefsUtils {
         }
         return false;
     }
+
+    public static boolean deleteKey(Context context,String key) {
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(key);
+        return editor.commit();
+    }
+
 }
